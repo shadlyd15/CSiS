@@ -53,5 +53,4 @@ int main() {
 			cout << "error : unknown operator" << endl;
 		}
 	}
-	cout << (2 ^ 2) << endl;
 }
