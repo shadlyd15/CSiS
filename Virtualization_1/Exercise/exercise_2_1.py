@@ -1,71 +1,75 @@
-from socket import *
-import base64
 import time
+import base64
+import socket
 
+def mail_client(recipient, subject, message, sender = "shadly.salahuddin@uni-wuppertal.de", smtp_host = "mail.uni-wuppertal.de", smtp_port = 25):
+  ret_val = False
+  smtp_host_port = (smtp_host, smtp_port)
+  smtp_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  smtp_client_socket.connect(smtp_host_port)
+  
+  # 220 	<domain> Service ready
+  if '220' in smtp_client_socket.recv(1024).decode():
+    print("SMTP Connected")
+    smtp_client_socket.send('HELO SMTP\r\n'.encode())
+    
+    # 250 	Requested mail action okay, completed
+    if '250' in smtp_client_socket.recv(1024).decode():
+      print("HELO Exchanged")
+
+      smtp_client_socket.send("AUTH PLAIN ".encode() + base64.b64encode(("\x00"+username+"\x00"+password).encode()) + "\r\n".encode())
+      if not "unsuccessful" in smtp_client_socket.recv(1024).decode():
+        print("Username Authenticated")
+        email_sender = "MAIL FROM:<" + sender + ">\r\n"
+        smtp_client_socket.send(email_sender.encode())
+        
+        # 250 	Requested mail action okay, completed
+        if '250' in smtp_client_socket.recv(1024).decode():
+          print("Sender Set")
+          email_recipient = "RCPT TO:<" + recipient + ">\r\n"
+          smtp_client_socket.send(email_recipient.encode())
+
+          # 250 	Requested mail action okay, completed
+          if '250' in smtp_client_socket.recv(1024).decode():
+            print("Recipient Set")
+            data = "DATA\r\n"
+            smtp_client_socket.send(data.encode())
+
+            # 354 	Start mail input; end with <CRLF>.<CRLF>
+            if '354' in smtp_client_socket.recv(1024).decode(): 
+              print("DATA Set")
+              email_subject = "Subject: " + subject + "\r\n\r\n"
+              smtp_client_socket.send(email_subject.encode())
+
+              date = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime()) + "\r\n\r\n"
+              smtp_client_socket.send(date.encode())
+              smtp_client_socket.send("\r\n".encode())
+              smtp_client_socket.send(message.encode())
+              smtp_client_socket.send("\r\n.\r\n".encode())
+
+              # 250 	Requested mail action okay, completed
+              if '250' in smtp_client_socket.recv(1024).decode():
+                print("Email Queued")
+                quit = "QUIT\r\n"
+                smtp_client_socket.send(quit.encode())
+
+                # 221 	<domain> Service closing transmission channel
+                if '221' in smtp_client_socket.recv(1024).decode():
+                  print("Service closing transmission channel")
+                  smtp_client_socket.close()
+                  ret_val = True
+  return ret_val
+
+
+username = "1943290"
+password = "************"
 filename = "email_content.txt"
+recipient_email = input("Please Enter Recipient Email : ") # Input Format : "<Email Address>"
+
 file = open(filename, "r")
-message = file.read()
-print(message)
 
+if mail_client(recipient_email, "Test", file.read()):
+  print("Email Sent Successfully")
+else:
+  print("Error : Email Not Sent")
 
-msg = "\r\n I love computer networks!"
-endmsg = "\r\n.\r\n"
-
-
-# mailserver = ("mail.uni-wuppertal.de", 25) #Fill in start #Fill in end
-mailserver = ("smtp.gmx.com", 25) #Fill in start #Fill in end
-clientSocket = socket(AF_INET, SOCK_STREAM)
-clientSocket.connect(mailserver)
-
-recv = clientSocket.recv(1024)
-recv = recv.decode()
-print("Message after connection request:" + recv)
-if recv[:3] != '220':
-    print('220 reply not received from server.')
-# heloCommand = 'EHLO Alice\r\n'
-# clientSocket.send(heloCommand.encode())
-# recv1 = clientSocket.recv(1024)
-# recv1 = recv1.decode()
-# print("Message after EHLO command:" + recv1)
-# if recv1[:3] != '250':
-#     print('250 reply not received from server.')
-
-# #Info for username and password
-# username = "xxxxxx"
-# password = "xxxxxx"
-# base64_str = ("\x00"+username+"\x00"+password).encode()
-# base64_str = base64.b64encode(base64_str)
-# authMsg = "AUTH PLAIN ".encode()+base64_str+"\r\n".encode()
-# clientSocket.send(authMsg)
-# recv_auth = clientSocket.recv(1024)
-# print(recv_auth.decode())
-
-# mailFrom = "MAIL FROM:<xxxxxxxx>\r\n"
-# clientSocket.send(mailFrom.encode())
-# recv2 = clientSocket.recv(1024)
-# recv2 = recv2.decode()
-# print("After MAIL FROM command: "+recv2)
-# rcptTo = "RCPT TO:<xxxxxxxxxx>\r\n"
-# clientSocket.send(rcptTo.encode())
-# recv3 = clientSocket.recv(1024)
-# recv3 = recv3.decode()
-# print("After RCPT TO command: "+recv3)
-# data = "DATA\r\n"
-# clientSocket.send(data.encode())
-# recv4 = clientSocket.recv(1024)
-# recv4 = recv4.decode()
-# print("After DATA command: "+recv4)
-# subject = "Subject: testing my client\r\n\r\n" 
-# clientSocket.send(subject.encode())
-# date = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
-# date = date + "\r\n\r\n"
-# clientSocket.send(date.encode())
-# clientSocket.send(msg.encode())
-# clientSocket.send(endmsg.encode())
-# recv_msg = clientSocket.recv(1024)
-# print("Response after sending message body:"+recv_msg.decode())
-# quit = "QUIT\r\n"
-# clientSocket.send(quit.encode())
-# recv5 = clientSocket.recv(1024)
-# print(recv5.decode())
-# clientSocket.close()
