@@ -11,6 +11,8 @@ print(message)
 msg = "\r\n I love computer networks!"
 endmsg = "\r\n.\r\n"
 
+
+# mailserver = ("mail.uni-wuppertal.de", 25) #Fill in start #Fill in end
 mailserver = ("smtp.gmx.com", 25) #Fill in start #Fill in end
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect(mailserver)
@@ -20,13 +22,13 @@ recv = recv.decode()
 print("Message after connection request:" + recv)
 if recv[:3] != '220':
     print('220 reply not received from server.')
-heloCommand = 'EHLO Alice\r\n'
-clientSocket.send(heloCommand.encode())
-recv1 = clientSocket.recv(1024)
-recv1 = recv1.decode()
-print("Message after EHLO command:" + recv1)
-if recv1[:3] != '250':
-    print('250 reply not received from server.')
+# heloCommand = 'EHLO Alice\r\n'
+# clientSocket.send(heloCommand.encode())
+# recv1 = clientSocket.recv(1024)
+# recv1 = recv1.decode()
+# print("Message after EHLO command:" + recv1)
+# if recv1[:3] != '250':
+#     print('250 reply not received from server.')
 
 # #Info for username and password
 # username = "xxxxxx"

@@ -3,5 +3,4 @@ icao_code_repo = {"Dusseldorf" : "EDDL", "Frankfurt" : "EDDF", "Tokio" : "RJAA",
 
 for city in icao_code_repo:
 	response = requests.get(url='https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=csv&stationString=' + icao_code_repo[city] + '&hoursBeforeNow=2')
-	temp = response.text.rsplit('/', 1)[0].rsplit(' ', 1)[1].replace('M', '-');
-	print("The temperature in " + city + "\tis : " + temp + " degrees C")
+	print("The temperature in " + city + "\tis : " + response.text.rsplit('/', 1)[0].rsplit(' ', 1)[1].replace('M', '-') + " degrees C")
