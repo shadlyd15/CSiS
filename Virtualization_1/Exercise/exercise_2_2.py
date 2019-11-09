@@ -1,7 +1,7 @@
 import requests
 
 icao_code_repo =  {
-	"Dusseldorf" 	: "EDDL",	"Frankfurt" 	: "EDDF",	"Tokio" 		: "RJAA",	"Buenos Aires" 	: "SAEZ",	"Vancouver" 	: "CYVR",	"Longyearbyen" 	: "ENSB",	"Goose Bay" 	: "CYYR"
+	"Dusseldorf" : "EDDL", "Frankfurt" : "EDDF", "Tokio" : "RJAA", "Buenos Aires" : "SAEZ", "Vancouver" : "CYVR", "Longyearbyen" : "ENSB", "Goose Bay" : "CYYR"
 }
 
 for city in icao_code_repo:
