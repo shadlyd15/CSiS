@@ -1,0 +1,13 @@
+.SECONDARY:
+DLL:
+	vbnc -r:func.dll main.vb
+
+EXECUTABLE: 
+	mono main.exe
+
+all:
+	DLL EXECUTABLE
+
+clean:
+	rm -f *.
+

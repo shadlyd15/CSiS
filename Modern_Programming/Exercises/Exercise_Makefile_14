@@ -1,15 +1,15 @@
-tfig1: tfig1
+TFIG1: 
 	fig2dev -L pdftex_t -p tfig1 tfig1.fig tfig1.tex
 	fig2dev -L pdftex tfig1.fig tfig1.pdf
 
-tfig2: tfig2
+TFIG2: 
 	fig2dev -L pdftex_t -p tfig2 tfig2.fig tfig2.tex
 	fig2dev -L pdftex tfig2.fig tfig2.pdf
 
-xelatex:xelatex
+XELATEX:
 	xelatex exercise14
 
-all: tfig1 tfig2 xelatex
+all: TFIG1 TFIG2 XELATEX
 
 clean:
 	rm -f *.

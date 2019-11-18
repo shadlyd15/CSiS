@@ -1,0 +1,12 @@
+SINGLE_PDF:
+        @for n in $$(seq 000 278); do convert chimp$$n.png chimp$$n.pdf; done
+
+ALL_PDF:
+        pdftk $(sort $(wildcard chimp???.png)) cat output movie.pdf
+
+all:
+	SINGLE_PDF ALL_PDF
+
+clean:
+	rm -f *.
+
