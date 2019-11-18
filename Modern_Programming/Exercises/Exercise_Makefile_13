@@ -1,0 +1,7 @@
+CXX = g++
+CXXFLAGS = -Wall
+
+for n in 1 2 3 ; do\ 
+	$(CXX) -DNUM=n proga.cc proga-$(n)
+	$(CXX) -DNUM=n progb.cc progb-$(n)
+done
