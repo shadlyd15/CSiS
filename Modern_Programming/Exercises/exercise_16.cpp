@@ -4,8 +4,7 @@
  */
 
 #include <iostream>
-#include <iomanip>
-#include <math.h>
+#include <string.h>
 
 using namespace std;
 
@@ -13,29 +12,67 @@ using namespace std;
 
 class Car{
 public:
-	Car();
+	Car(char * type);
 	~Car();
 	char type[BUFFER_SIZE];
 	double mileage;
 	void drive(double distance);
-	void tow();
+	void tow(Car * towed, double distance);
+	char * getType();
+	double getMilage();
+	void print();
 	
 };
 
-int main(){
-	int iterations = 0;
-	cout << "Enter the number of iteration : ";
-	cin >> iterations;
-	int in_circle_count = 0;
+Car::Car(char * type){
+	this->mileage = 0;
+	memset(this->type, 0x00, BUFFER_SIZE);
+	memcpy(this->type, type, strlen(type));
+}
 
-	for (int i = 0; i < iterations; ++i){
-		double x = ((double) rand() / (RAND_MAX));
-		double y = ((double) rand() / (RAND_MAX));
-		if((pow(x, 2) + pow(y, 2)) <= 1){
-			in_circle_count++;
-		}
+Car::~Car(){
+
+}
+
+void Car::drive(double distance){
+	this->mileage = this->mileage + distance;
+}
+
+void Car::tow(Car * towed, double distance){
+	if(towed){
+		this->mileage = this->mileage + distance;
+		towed->mileage = towed->mileage + distance;
 	}
+}
 
-	cout << "Approximation of PI : " << ((double)in_circle_count/iterations) * 4 << endl;
+char * Car::getType(){
+	return this->type;
+}
+
+double Car::getMilage(){
+	return this->mileage;
+}
+
+void Car::print(){
+	cout << "Car Type : " << this->type << ",\tMilage : " << this->mileage << endl;
+}
+
+int main(){
+	Car * bmw = new Car("BMW");
+	Car * tesla = new Car("Tesla");
+
+	bmw->print();
+	tesla->print();
+
+	bmw->drive(5);
+	tesla->drive(10);
+
+	bmw->print();
+	tesla->print();
+
+	tesla->tow(bmw, 5);
+
+	bmw->print();
+	tesla->print();
 }
 
