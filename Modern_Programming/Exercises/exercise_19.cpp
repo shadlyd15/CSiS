@@ -3,6 +3,7 @@
 // version: 09.10.2019
 
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -18,6 +19,17 @@ private:
   static bool isLeapYear(int year)
   { return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0; }
   void checkDate();
+
+  int rata_die_day() const {
+    Date date;
+    memcpy(&date, this, sizeof(Date));
+    if (date.month < 3){
+      date.year--;
+      date.month += 12;
+    }
+    return 365*date.year + date.year/4 - date.year/100 + date.year/400 + (153*date.month - 457)/5 + date.day - 306;
+  }
+
 public:
   explicit Date(int d = 1, int m = 1, int y = stdYear) : day{d}, month{m}, year{y}
   {
@@ -35,16 +47,24 @@ public:
   }
   Date& incDay();
   void print() const { cout << day << '.' << month << '.' << year << endl; }
+
   int dayInYear() const {
     int day_in_year = 0;
-    if((this->month - 2) > -1)
-    for (int i = 0; i < this->month; i++){
-      day_in_year = day_in_year + this->daysPerMonth[i - 1];
+    if((this->month - 1) > 0){
+      for (int i = 0; i < this->month; i++){
+        day_in_year = day_in_year + this->daysPerMonth[i - 1];
+      }
     }
-    day_in_year = day_in_year + this->day;
+    day_in_year = day_in_year + this->day + ((this->isLeapYear(this->year) && (this->month > 2)) ? 1 : 0);
     return day_in_year;
   }
+
+  int operator-(const Date& d2) const{
+    return this->rata_die_day() - d2.rata_die_day();
+  }
 };
+
+
 
 void Date::checkDate()
 {
@@ -73,6 +93,7 @@ Date& Date::incDay()
   return *this;
 }
 
+
 int main()
 {
   Date d1;
@@ -82,4 +103,5 @@ int main()
   Date d3{13, 7, 1999};
   d3.print();
   cout << "Day in Year : " << d3.dayInYear() << endl;
+  cout << "Days Difference : " << d3 - d1 << endl;
 }
