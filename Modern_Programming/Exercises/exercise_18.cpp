@@ -24,7 +24,6 @@ Averager & Averager::nextElement(double element){
 }
 
 double Averager::getAverage(){
-	cout << "Total :" << total << endl;
 	return total / total_elements;
 }
 
