@@ -45,3 +45,27 @@ const dates::Date dates::Date::operator++(int)
   return temp;
 }
 
+void dates::Date::setDate(int d, int m, int y){
+  this->day = d;
+  this->month = m;
+  this->year = y;
+  this->checkDate();
+}
+
+void dates::Date::print() const { 
+  std::cout << this->day << '.' << this->month << '.' << this->year << std::endl; 
+}
+
+int dates::Date::getDay() const { 
+  return this->day; 
+}
+
+int dates::Date::getMonth() const { 
+  return this->month; 
+}
+
+int dates::Date::getYear() const { 
+  return this->year; 
+}
+
+
