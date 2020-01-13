@@ -35,10 +35,6 @@ int main(){
 			double top_right_y = (j + 1) * step_size;
 
 			if(((pow(bottom_left_x, 2) + pow(bottom_left_y, 2)) <= 1) && ((pow(top_right_x, 2) + pow(top_right_y, 2)) >= 1)){
-				// cout << "\tLower Limit : " << "(" << bottom_left_x << " , " << bottom_left_y << ") ";
-				// cout << "\tUpper Limit : " << "(" << top_right_x << " , " << bottom_left_y << ") ";
-				// cout << endl;
-
 				for (double k = 0; k < iterations; k++){
 					number_of_points = number_of_points + 1;
 					double rand_point_x = bottom_left_x + ((double)rand()/RAND_MAX) * (top_right_x - bottom_left_x);
